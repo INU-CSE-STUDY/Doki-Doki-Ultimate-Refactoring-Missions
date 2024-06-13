@@ -95,7 +95,7 @@ jobs:
           ${{ runner.os }}-gradle-
 
     - name: 프로젝트 test
-      run: ./gradlew --info test --no-daemon
+      run: SPRING_PROFILES_ACTIVE=test ./gradlew --info test --no-daemon
     
     - name: test 실패 PR 닫기
       if: ${{ failure() }}
