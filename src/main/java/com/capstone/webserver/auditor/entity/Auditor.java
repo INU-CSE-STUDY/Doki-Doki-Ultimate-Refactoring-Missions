@@ -19,11 +19,11 @@ public class Auditor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(name="id")
+    @JoinColumn(name="subject_id")
     @ManyToOne(fetch = FetchType.EAGER)
     private Subject subject;
 
-    @JoinColumn(name="id")
+    @JoinColumn(name="user_id")
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 }

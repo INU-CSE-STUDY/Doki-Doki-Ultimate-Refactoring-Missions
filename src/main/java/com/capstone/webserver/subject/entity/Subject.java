@@ -64,6 +64,6 @@ public class Subject {
     @OneToMany(mappedBy = "subject")
     private List<Auditor> auditors;
 
-    @OneToMany(mappedBy = "subjects")
+    @OneToMany(mappedBy = "subject")
     private List<Attendance> attendances;
 }
