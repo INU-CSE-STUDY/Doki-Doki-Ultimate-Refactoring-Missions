@@ -1,5 +1,6 @@
 package com.capstone.webserver.user.entity;
 
+import com.capstone.webserver.attendance.entity.Attendance;
 import com.capstone.webserver.auditor.entity.Auditor;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
@@ -62,4 +63,10 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Auditor> auditors;
+
+    @OneToMany(mappedBy = "prof")
+    private List<Attendance> profAttendances;
+
+    @OneToMany(mappedBy = "student")
+    private List<Attendance> studentAttendances;
 }
