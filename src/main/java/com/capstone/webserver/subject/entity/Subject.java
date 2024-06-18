@@ -60,6 +60,6 @@ public class Subject {
     @Schema(description = "강좌의 해당 학기")
     private String semester;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "subject")
     private List<Auditor> auditors;
 }
