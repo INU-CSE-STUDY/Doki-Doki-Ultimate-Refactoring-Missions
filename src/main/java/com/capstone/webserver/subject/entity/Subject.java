@@ -1,8 +1,11 @@
 package com.capstone.webserver.subject.entity;
 
+import com.capstone.webserver.auditor.entity.Auditor;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Builder
@@ -56,4 +59,7 @@ public class Subject {
     @Column
     @Schema(description = "강좌의 해당 학기")
     private String semester;
+
+    @OneToMany(mappedBy = "user")
+    private List<Auditor> auditors;
 }

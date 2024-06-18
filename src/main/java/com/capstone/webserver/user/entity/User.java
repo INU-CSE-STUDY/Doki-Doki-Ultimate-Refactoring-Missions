@@ -1,10 +1,12 @@
 package com.capstone.webserver.user.entity;
 
+import com.capstone.webserver.auditor.entity.Auditor;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Builder
@@ -57,4 +59,7 @@ public class User {
     @Schema(description = "유저 생성 일시")
     @Column
     private LocalDateTime createdDate;
+
+    @OneToMany(mappedBy = "user")
+    private List<Auditor> auditors;
 }
