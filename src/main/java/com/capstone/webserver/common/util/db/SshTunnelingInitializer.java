@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.Properties;
 
 @Slf4j
-@Profile("dev")
+@Profile({"dev", "test"})
 @Component
 @ConfigurationProperties(prefix = "ssh")
 @Setter
