@@ -78,8 +78,11 @@ jobs:
     - name: application.yml 생성
       run: |
         mkdir src/main/resources
+        mkdir src/main/resources/ssh
         touch src/main/resources/application.yml
+        touch src/main/resources/ssh/sshKey.pem
         echo "${{ secrets.APPLICATION_YML }}" > src/main/resources/application.yml
+        echo "${{ secrets.SSH_KEY }}" > src/main/resources/ssh/sshKey.pem
         
     - name: gradlew에 실행 권한 부여
       run: chmod +x gradlew
