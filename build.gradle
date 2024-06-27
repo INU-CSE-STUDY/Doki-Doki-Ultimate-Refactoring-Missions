@@ -60,8 +60,15 @@ dependencies {
 
 	// ssh
 	implementation 'com.github.mwiede:jsch:0.2.18'
+
+	// AOP Aspect
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile).configureEach {
+	options.compilerArgs << "-parameters"
 }
