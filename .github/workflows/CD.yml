@@ -26,11 +26,8 @@ jobs:
       - name: application.yml 생성
         run: |
             mkdir src/main/resources
-            mkdir src/main/resources/ssh
             touch src/main/resources/application.yml
-            touch src/main/resources/ssh/sshKey.pem
             echo "${{ secrets.APPLICATION_YML }}" > src/main/resources/application.yml
-            echo "${{ secrets.SSH_KEY }}" > src/main/resources/ssh/sshKey.pem
         
       - name: gradlew에 실행 권한 부여
         run: chmod +x ./gradlew
@@ -45,7 +42,7 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Build with Gradle
-        run: SPRING_PROFILES_ACTIVE=test ./gradlew build --no-daemon
+        run: SPRING_PROFILES_ACTIVE=prod ./gradlew build -x test --no-daemon
 
       - name: zip 파일 생성
         run: zip -r ./$GITHUB_SHA.zip .
