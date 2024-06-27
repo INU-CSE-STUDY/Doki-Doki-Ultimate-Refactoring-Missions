@@ -1,6 +1,5 @@
-package com.capstone.webserver.aspects;
+package com.capstone.webserver.common.aspects;
 
-import com.capstone.webserver.exception.CustomException;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.*;
 import org.aspectj.lang.annotation.*;
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.Arrays;
 
 @Aspect
 @Component
@@ -31,10 +29,11 @@ public class LoggingAspect {
         Object[] args = joinPoint.getArgs();
 
         for (Parameter parameter : parameters) {
-            log.info("\nparameter name: " + parameter.getName());
-            log.info("\nparameter type: " + parameter.getType().getSimpleName());
+            log.info("parameter name: " + parameter.getName());
+            log.info("parameter type: " + parameter.getType().getSimpleName());
         }
     }
+
     @AfterReturning(pointcut = "api()", returning = "result")
     public void afterReturningLog(JoinPoint joinPoint, Object result) throws NoSuchMethodException {
 
@@ -43,19 +42,12 @@ public class LoggingAspect {
 
         Object[] args = joinPoint.getArgs();
         for (Object arg : args) {
-            log.info("\nparameter value: " + arg);
+            log.info("parameter value: " + arg);
         }
 
 
         if (result == null) return;
-        log.info("\t return: " + result);
-    }
-
-    @AfterThrowing(pointcut = "api()", throwing = "e")
-    public void afterThrowingLog(JoinPoint joinPoint, CustomException e) {
-        log.error("[AfterThrowing] Method name: " + joinPoint.getSignature().getName());
-        log.error("\nExceptionCode: " + e.getExceptionCode());
-        log.error("\nExceptionMessage: " + e.getMessage());
+        log.info("return: " + result);
     }
 
     private Method getMethod(JoinPoint joinPoint) throws NoSuchMethodException {

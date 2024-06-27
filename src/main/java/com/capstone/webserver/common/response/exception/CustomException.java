@@ -1,4 +1,4 @@
-package com.capstone.webserver.exception;
+package com.capstone.webserver.common.response.exception;
 
 import lombok.Getter;
 
