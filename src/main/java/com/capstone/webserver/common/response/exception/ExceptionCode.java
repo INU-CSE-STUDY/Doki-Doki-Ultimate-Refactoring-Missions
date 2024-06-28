@@ -57,7 +57,8 @@ public enum ExceptionCode {
     /**
      * 500 SERVER_ERROR : 서버 에러
      */
-    SERVER_ERROR(INTERNAL_SERVER_ERROR, "서버 에러가 발생했습니다.");
+    SERVER_ERROR(INTERNAL_SERVER_ERROR, "서버 에러가 발생했습니다."),
+    FILE_NOT_FOUND(INTERNAL_SERVER_ERROR, "해당 파일을 찾지 못하였습니다."),;
 
 
     private final HttpStatus httpStatus;

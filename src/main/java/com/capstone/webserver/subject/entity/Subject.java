@@ -23,43 +23,43 @@ public class Subject {
 
     @Column
     @Schema(description = "학수번호")
-    private String subjectId;
+    private String idSubject;
 
     @Column
     @Schema(description = "단과대학")
-    private String university;
+    private String univSubject;
 
     @Column
     @Schema(description = "학과/부")
-    private String major;
+    private String majorSubject;
 
     @Column
     @Schema(description = "강좌 종류")
-    private String type;
+    private String typeSubject;
 
     @Column
     @Schema(description = "강좌명")
-    private String name;
+    private String nameSubject;
 
     @Column
     @Schema(description = "교수명")
-    private String prof;
+    private String profSubject;
 
     @Column
     @Schema(description = "시간표")
-    private String time;
+    private String timeSubject;
 
     @Column
     @Schema(description = "학점")
-    private String credit;
+    private Integer creditSubject;
 
     @Column
     @Schema(description = "강좌의 해당 년도")
-    private String year;
+    private String yearSubject;
 
     @Column
     @Schema(description = "강좌의 해당 학기")
-    private String semester;
+    private String semesterSubject;
 
     @OneToMany(mappedBy = "subject")
     private List<Auditor> auditors;
