@@ -5,6 +5,11 @@ import com.capstone.webserver.common.util.convert.EnumName;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Getter
 public enum Major implements EnumName<String> {
@@ -95,6 +100,15 @@ public enum Major implements EnumName<String> {
 
     private final String krName;
     private final College college;
+
+    public static List<String> getByCollege(String college) {
+        return Arrays.stream(values())
+                .filter(major ->
+                        major.college.getKrName().equals(college)
+                )
+                .map(Major::getKrName)
+                .collect(Collectors.toList());
+    }
 
     @Override
     public String getName() {

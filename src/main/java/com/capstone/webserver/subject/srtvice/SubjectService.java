@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
 import java.util.stream.Collector;
@@ -54,6 +55,17 @@ public class SubjectService {
         return subjects.stream()
                 .map(this::toSubjectDto)
                 .collect(Collectors.toList());
+    }
+
+
+    public List<String> getColleges() {
+        return Arrays.stream(College.values())
+                .map(College::getKrName)
+                .toList();
+    }
+
+    public List<String> getMajors(String college) {
+        return Major.getByCollege(college);
     }
 
     private Subject toEntity(SubjectDto.SubjectMapperDto dto) {
