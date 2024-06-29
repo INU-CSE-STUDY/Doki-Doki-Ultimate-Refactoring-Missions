@@ -27,11 +27,11 @@ public class Subject {
 
     @Column
     @Schema(description = "단과대학")
-    private String univSubject;
+    private College univSubject;
 
     @Column
     @Schema(description = "학과/부")
-    private String majorSubject;
+    private Major majorSubject;
 
     @Column
     @Schema(description = "강좌 종류")

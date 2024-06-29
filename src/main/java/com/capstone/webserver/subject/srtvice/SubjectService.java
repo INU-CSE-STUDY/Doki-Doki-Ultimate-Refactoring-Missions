@@ -2,6 +2,8 @@ package com.capstone.webserver.subject.srtvice;
 
 import com.capstone.webserver.common.response.exception.CustomException;
 import com.capstone.webserver.subject.dto.SubjectDto;
+import com.capstone.webserver.subject.entity.College;
+import com.capstone.webserver.subject.entity.Major;
 import com.capstone.webserver.subject.entity.Subject;
 import com.capstone.webserver.subject.repository.SubjectRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,7 +37,11 @@ public class SubjectService {
             content.forEach(sj::add);
 
             ObjectMapper obm = new ObjectMapper();
-            List<Subject> subjects = List.of(obm.readValue(sj.toString(), Subject[].class));
+            List<SubjectDto.SubjectMapperDto> dtos = List.of(obm.readValue(sj.toString(), SubjectDto.SubjectMapperDto[].class));
+
+            List<Subject> subjects = dtos.stream()
+                    .map(this::toEntity)
+                    .collect(Collectors.toList());
 
             subjectRepository.saveAll(subjects);
         } catch (IOException e) {
@@ -50,16 +56,31 @@ public class SubjectService {
                 .collect(Collectors.toList());
     }
 
+    private Subject toEntity(SubjectDto.SubjectMapperDto dto) {
+        return Subject.builder()
+                .idSubject(dto.getIdSubject())
+                .semesterSubject(dto.getSemesterSubject())
+                .creditSubject(dto.getCreditSubject())
+                .majorSubject(Major.getByName(dto.getMajorSubject()))
+                .nameSubject(dto.getNameSubject())
+                .univSubject(College.getByName(dto.getUnivSubject()))
+                .typeSubject(dto.getTypeSubject())
+                .yearSubject(dto.getYearSubject())
+                .timeSubject(dto.getTimeSubject())
+                .profSubject(dto.getProfSubject())
+                .build();
+    }
+
     private SubjectDto.SubjectResponseDto toSubjectDto(Subject subject) {
         return SubjectDto.SubjectResponseDto.builder()
                 .creditSubject(subject.getCreditSubject())
                 .idSubject(subject.getIdSubject())
-                .majorSubject(subject.getMajorSubject())
+                .majorSubject(subject.getMajorSubject().getKrName())
                 .nameSubject(subject.getNameSubject())
                 .profSubject(subject.getProfSubject())
                 .timeSubject(subject.getTimeSubject())
                 .typeSubject(subject.getTypeSubject())
-                .univSubject(subject.getUnivSubject())
+                .univSubject(subject.getUnivSubject().getKrName())
                 .build();
     }
 }
