@@ -20,6 +20,7 @@ public enum ExceptionCode {
     ID_INVALID(BAD_REQUEST, "올바른 형식의 아이디가 아닙니다."),
     PASSWORD_INVALID(BAD_REQUEST, "올바른 형식의 비밀번호가 아닙니다."),
     DATE_INVALID(BAD_REQUEST, "올바른 형식의 날짜가 아닙니다."),
+    NOT_FOUND_ENUM(BAD_REQUEST, "해당하는 enum type이 존재하지 않습니다."),
 
 //    /**
 //     * 400 BAD_REQUEST: 길이 오류
