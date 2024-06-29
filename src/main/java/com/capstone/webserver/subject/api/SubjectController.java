@@ -1,15 +1,14 @@
 package com.capstone.webserver.subject.api;
 
+import com.capstone.webserver.common.dto.PageRequestDTO;
+import com.capstone.webserver.common.dto.PageResponseDTO;
 import com.capstone.webserver.subject.dto.SubjectDto;
 import com.capstone.webserver.subject.entity.Subject;
 import com.capstone.webserver.subject.srtvice.SubjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -41,11 +40,19 @@ public class SubjectController {
         return new ResponseEntity<>(colleges, status);
     }
 
-    @GetMapping("/api/subjects/colleges/{college}")
-    public ResponseEntity<List<String>> getMajors(@PathVariable(value = "college") String college) {
+    @GetMapping("/api/subjects/colleges/majors")
+    public ResponseEntity<List<String>> getMajors(@RequestParam(value = "college") String college) {
         HttpStatus status = HttpStatus.OK;
         List<String> majors = subjectService.getMajors(college);
 
         return new ResponseEntity<>(majors, status);
+    }
+
+    @GetMapping("/api/subjects/majors")
+    public ResponseEntity<PageResponseDTO<SubjectDto.SubjectResponseDto, Subject>> getSubjectsByMajor(@ModelAttribute PageRequestDTO dto, @RequestParam(value = "major") String major) {
+        HttpStatus status = HttpStatus.OK;
+        PageResponseDTO<SubjectDto.SubjectResponseDto, Subject> subjects = subjectService.getSubjectsByMajor(dto, major);
+
+        return new ResponseEntity<>(subjects, status);
     }
 }

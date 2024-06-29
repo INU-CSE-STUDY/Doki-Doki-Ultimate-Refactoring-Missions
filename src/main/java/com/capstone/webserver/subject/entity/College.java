@@ -1,9 +1,12 @@
 package com.capstone.webserver.subject.entity;
 
+import com.capstone.webserver.common.response.exception.CustomException;
 import com.capstone.webserver.common.util.convert.AbstractEnumNameConverter;
 import com.capstone.webserver.common.util.convert.EnumName;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import static com.capstone.webserver.common.response.exception.ExceptionCode.NOT_FOUND_ENUM;
 
 @Getter
 @RequiredArgsConstructor
@@ -41,7 +44,7 @@ public enum College implements EnumName<String> {
             }
         }
 
-        return null;
+        throw new CustomException(NOT_FOUND_ENUM);
     }
 
     @jakarta.persistence.Converter(autoApply = true)

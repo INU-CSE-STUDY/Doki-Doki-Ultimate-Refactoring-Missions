@@ -1,14 +1,20 @@
 package com.capstone.webserver.subject.srtvice;
 
+import com.capstone.webserver.common.dto.PageRequestDTO;
+import com.capstone.webserver.common.dto.PageResponseDTO;
 import com.capstone.webserver.common.response.exception.CustomException;
 import com.capstone.webserver.subject.dto.SubjectDto;
 import com.capstone.webserver.subject.entity.College;
 import com.capstone.webserver.subject.entity.Major;
 import com.capstone.webserver.subject.entity.Subject;
+import com.capstone.webserver.subject.repository.SubjectQueryDSLRepository;
 import com.capstone.webserver.subject.repository.SubjectRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -18,6 +24,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
+import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -27,6 +34,7 @@ import static com.capstone.webserver.common.response.exception.ExceptionCode.FIL
 @RequiredArgsConstructor
 public class SubjectService {
     private final SubjectRepository subjectRepository;
+    private final SubjectQueryDSLRepository subjectQueryDSLRepository;
 
     public void insert() {
         try {
@@ -66,6 +74,14 @@ public class SubjectService {
 
     public List<String> getMajors(String college) {
         return Major.getByCollege(college);
+    }
+
+    public PageResponseDTO<SubjectDto.SubjectResponseDto, Subject> getSubjectsByMajor(PageRequestDTO dto, String majorName) {
+        Major major = Major.getByName(majorName);
+        Page<Subject> subjects = subjectQueryDSLRepository.findSubjectsByMajor(PageRequest.of(dto.getPage(), dto.getSize()), major);
+        Function<Subject, SubjectDto.SubjectResponseDto> mapper = (this::toSubjectDto);
+
+        return new PageResponseDTO<>(subjects, mapper);
     }
 
     private Subject toEntity(SubjectDto.SubjectMapperDto dto) {

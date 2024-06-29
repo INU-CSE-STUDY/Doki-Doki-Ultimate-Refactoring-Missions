@@ -1,5 +1,6 @@
 package com.capstone.webserver.subject.entity;
 
+import com.capstone.webserver.common.response.exception.CustomException;
 import com.capstone.webserver.common.util.convert.AbstractEnumNameConverter;
 import com.capstone.webserver.common.util.convert.EnumName;
 import lombok.Getter;
@@ -9,6 +10,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static com.capstone.webserver.common.response.exception.ExceptionCode.NOT_FOUND_ENUM;
 
 @RequiredArgsConstructor
 @Getter
@@ -122,7 +125,7 @@ public enum Major implements EnumName<String> {
             }
         }
 
-        return null;
+        throw new CustomException(NOT_FOUND_ENUM);
     }
 
     @jakarta.persistence.Converter(autoApply = true)
