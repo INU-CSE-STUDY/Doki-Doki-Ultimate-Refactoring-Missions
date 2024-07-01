@@ -57,7 +57,7 @@ public class SubjectService {
     }
 
     public List<SubjectDto.SubjectResponseDto> findAll() {
-        List<Subject> subjects = subjectRepository.findAll();
+        List<Subject> subjects = subjectQueryDSLRepository.findAll();
         return subjects.stream()
                 .map(this::toSubjectDto)
                 .collect(Collectors.toList());
