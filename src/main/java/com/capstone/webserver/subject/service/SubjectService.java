@@ -1,4 +1,4 @@
-package com.capstone.webserver.subject.srtvice;
+package com.capstone.webserver.subject.service;
 
 import com.capstone.webserver.common.dto.PageRequestDTO;
 import com.capstone.webserver.common.dto.PageResponseDTO;
@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -25,7 +24,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
 import java.util.function.Function;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import static com.capstone.webserver.common.response.exception.ExceptionCode.FILE_NOT_FOUND;
