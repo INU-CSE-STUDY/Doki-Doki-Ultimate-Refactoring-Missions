@@ -37,4 +37,10 @@ public class SubjectQueryDSLRepository extends QuerydslRepositorySupport  {
 
         return new PageImpl<>(subjects, pageable, count);
     }
+
+    public List<Subject> findAll() {
+        return jpaQueryFactory
+                .selectFrom(qSubject)
+                .fetch();
+    }
 }

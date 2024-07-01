@@ -4,7 +4,7 @@ import com.capstone.webserver.common.dto.PageRequestDTO;
 import com.capstone.webserver.common.dto.PageResponseDTO;
 import com.capstone.webserver.subject.dto.SubjectDto;
 import com.capstone.webserver.subject.entity.Subject;
-import com.capstone.webserver.subject.srtvice.SubjectService;
+import com.capstone.webserver.subject.service.SubjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
