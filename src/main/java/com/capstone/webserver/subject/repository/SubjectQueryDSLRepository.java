@@ -32,7 +32,7 @@ public class SubjectQueryDSLRepository extends QuerydslRepositorySupport  {
 
         long count = jpaQueryFactory
                 .selectFrom(qSubject)
-                .where(SubjectExpression.eqMajor(qSubject, major))
+                .where(qSubject.eqMajor(major))
                 .stream().count();
 
         return new PageImpl<>(subjects, pageable, count);
