@@ -9,10 +9,10 @@ import com.capstone.webserver.user.entity.User;
 import com.capstone.webserver.user.repository.UserQueryDSLRepository;
 import com.capstone.webserver.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +20,8 @@ public class UserService {
 
     private final UserQueryDSLRepository userQueryDSLRepository;
     private final UserRepository userRepository;
+
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public Long save(UserDto.UserBasicDto dto) {
         if (isDuplicated(dto.getLoginId())) {
@@ -29,7 +31,7 @@ public class UserService {
         User user = User.builder()
                         .type(Role.valueOf(dto.getType().toUpperCase()))
                         .loginId(dto.getLoginId())
-                        .password(dto.getPassword())
+                        .password(bCryptPasswordEncoder.encode(dto.getPassword()))
                         .name(dto.getName())
                         .phone(dto.getPhone())
                         .email(dto.getEmail())
