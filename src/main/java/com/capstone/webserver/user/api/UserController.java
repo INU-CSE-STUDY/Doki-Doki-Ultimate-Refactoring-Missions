@@ -30,8 +30,8 @@ public class UserController {
     }
 
     @GetMapping("/users/loginId/{loginId}")
-    public ResponseEntity<User> findByLoginId(@PathVariable("loginId") String loginId) {
-        User user = userService.findByLoginId(loginId);
+    public ResponseEntity<UserDto.UserBasicDto> findByLoginId(@PathVariable("loginId") String loginId) {
+        UserDto.UserBasicDto user = userService.findByLoginId(loginId);
 
         return ResponseEntity.ok(user);
     }

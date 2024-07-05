@@ -65,8 +65,11 @@ public class UserService {
                 .toList();
     }
 
-    public User findByLoginId(String loginId) {
-        return userQueryDSLRepository.findByLoginId(loginId);
+    public UserDto.UserBasicDto findByLoginId(String loginId) {
+
+        User user = userQueryDSLRepository.findByLoginId(loginId);
+
+        return toUserInfoDto(user);
     }
 
     private UserDto.UserBasicDto toUserInfoDto(User user) {
