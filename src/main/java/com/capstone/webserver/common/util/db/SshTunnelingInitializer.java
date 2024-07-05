@@ -39,8 +39,6 @@ public class SshTunnelingInitializer {
         Integer forwardedPort = null;
 
         try {
-            log.info("{}@{}:{}:{} with privateKey",user, remoteJumpHost, sshPort, databasePort);
-
             log.info("start ssh tunneling..");
             JSch jSch = new JSch();
 
