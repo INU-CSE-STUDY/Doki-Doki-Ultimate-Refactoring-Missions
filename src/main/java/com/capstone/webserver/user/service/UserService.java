@@ -58,8 +58,12 @@ public class UserService {
         User user = userQueryDSLRepository.findByLoginId(loginId);
 
         if (user != null && bCryptPasswordEncoder.matches(password, user.getPassword())) {
-            String token = tokenProvider.createToken(String.format("%s:%s", user.getLoginId(), user.getType()));
-            return new UserDto.UserLoginResponseDto(user.getLoginId(), user.getType().toString(), token);
+            String accessToken = tokenProvider.createAccessToken(String.format("%s:%s", user.getLoginId(), user.getType()));
+            String refreshToken = tokenProvider.createRefreshToken();
+
+            userQueryDSLRepository.saveRefreshToken(loginId, refreshToken);
+
+            return new UserDto.UserLoginResponseDto(user.getLoginId(), user.getType().toString(), accessToken, refreshToken);
         }
         return null;
     }
@@ -72,7 +76,7 @@ public class UserService {
                 .toList();
     }
 
-    public List<UserDto.UserBasicDto> findAllByType(String type) {
+    public List<UserDto.UserBasicDto> findAllByType(Role type) {
         List<User> users = userQueryDSLRepository.findAllByType(type);
 
         return users.stream()

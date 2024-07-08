@@ -52,6 +52,7 @@ public class UserDto {
     public static class UserLoginResponseDto {
         private String loginId;
         private String type;
-        private String token;
+        private String accessToken;
+        private String refreshToken;
     }
 }

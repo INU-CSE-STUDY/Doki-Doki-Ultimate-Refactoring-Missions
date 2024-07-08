@@ -6,6 +6,7 @@ import com.capstone.webserver.user.entity.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -25,10 +26,10 @@ public class UserQueryDSLRepository extends QuerydslRepositorySupport {
                 .fetch();
     }
 
-    public List<User> findAllByType(String type) {
+    public List<User> findAllByType(Role type) {
         return queryFactory
                 .selectFrom(qUser)
-                .where(qUser.type.eq(Role.valueOf(type.toUpperCase())))
+                .where(qUser.type.eq(type))
                 .fetch();
     }
 
@@ -37,5 +38,15 @@ public class UserQueryDSLRepository extends QuerydslRepositorySupport {
                 .selectFrom(qUser)
                 .where(qUser.loginId.eq(loginId))
                 .fetchOne();
+    }
+
+    @Transactional
+    public void saveRefreshToken(String loginId, String newRefreshToken) {
+        QUser user = QUser.user;
+
+        queryFactory.update(user)
+                .set(user.refreshToken, newRefreshToken)
+                .where(user.loginId.eq(loginId))
+                .execute();
     }
 }

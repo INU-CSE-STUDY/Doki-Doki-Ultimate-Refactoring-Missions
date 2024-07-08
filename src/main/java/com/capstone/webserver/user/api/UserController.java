@@ -1,6 +1,7 @@
 package com.capstone.webserver.user.api;
 
 import com.capstone.webserver.user.dto.UserDto;
+import com.capstone.webserver.user.entity.Role;
 import com.capstone.webserver.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class UserController {
     }
 
     @GetMapping("/users/type/{type}")
-    public ResponseEntity<List<UserDto.UserBasicDto>> findAllUsersByType(@PathVariable("type") String type) {
+    public ResponseEntity<List<UserDto.UserBasicDto>> findAllUsersByType(@PathVariable("type") Role type) {
         List<UserDto.UserBasicDto> users = userService.findAllByType(type);
 
         return ResponseEntity.ok(users);
