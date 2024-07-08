@@ -25,7 +25,7 @@ public class SubjectQueryDSLRepository extends QuerydslRepositorySupport  {
     public Page<Subject> findSubjectsByMajor(Pageable pageable, Major major) {
         List<Subject> subjects = jpaQueryFactory
                 .selectFrom(qSubject)
-                .where(SubjectExpression.eqMajor(qSubject, major))
+                .where(qSubject.eqMajor(major))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
