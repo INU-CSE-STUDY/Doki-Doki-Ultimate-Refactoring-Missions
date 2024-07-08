@@ -1,5 +1,6 @@
 package com.capstone.webserver.user.service;
 
+import com.capstone.webserver.common.config.jwt.TokenProvider;
 import com.capstone.webserver.common.response.exception.CustomException;
 import com.capstone.webserver.common.response.exception.ExceptionCode;
 import com.capstone.webserver.user.dto.UserDto;
@@ -22,6 +23,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final TokenProvider tokenProvider;
 
     public Long save(UserDto.UserBasicDto dto) {
         if (isDuplicated(dto.getLoginId())) {
@@ -47,6 +49,19 @@ public class UserService {
         User user = userQueryDSLRepository.findByLoginId(loginId);
 
         return user != null;
+    }
+
+    public UserDto.UserLoginResponseDto login(UserDto.UserLoginDto dto) {
+        String loginId = dto.getLoginId();
+        String password = dto.getPassword();
+
+        User user = userQueryDSLRepository.findByLoginId(loginId);
+
+        if (user != null && bCryptPasswordEncoder.matches(password, user.getPassword())) {
+            String token = tokenProvider.createToken(String.format("%s:%s", user.getLoginId(), user.getType()));
+            return new UserDto.UserLoginResponseDto(user.getLoginId(), user.getType().toString(), token);
+        }
+        return null;
     }
 
     public List<UserDto.UserBasicDto> findAll() {

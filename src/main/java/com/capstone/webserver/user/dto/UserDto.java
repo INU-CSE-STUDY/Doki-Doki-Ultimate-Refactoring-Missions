@@ -44,4 +44,14 @@ public class UserDto {
         private String loginId;
         private String password;
     }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserLoginResponseDto {
+        private String loginId;
+        private String type;
+        private String token;
+    }
 }

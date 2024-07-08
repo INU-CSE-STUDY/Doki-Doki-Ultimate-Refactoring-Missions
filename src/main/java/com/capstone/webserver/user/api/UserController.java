@@ -1,7 +1,6 @@
 package com.capstone.webserver.user.api;
 
 import com.capstone.webserver.user.dto.UserDto;
-import com.capstone.webserver.user.entity.User;
 import com.capstone.webserver.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -49,4 +48,10 @@ public class UserController {
         return ResponseEntity.ok(isDuplicated);
     }
 
+    @PostMapping("/users/login")
+    public ResponseEntity<UserDto.UserLoginResponseDto> login(@RequestBody UserDto.UserLoginDto dto) {
+        UserDto.UserLoginResponseDto user = userService.login(dto);
+
+        return ResponseEntity.ok(user);
+    }
 }
