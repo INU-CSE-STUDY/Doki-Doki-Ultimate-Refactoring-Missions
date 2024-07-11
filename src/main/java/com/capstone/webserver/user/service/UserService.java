@@ -58,7 +58,7 @@ public class UserService {
     }
 
     public List<UserDto.UserBasicDto> findAllByType(String type) {
-        List<User> users = userQueryDSLRepository.findAllByType(type);
+        List<User> users = userQueryDSLRepository.findAllByType(Role.valueOf(type.toUpperCase()));
 
         return users.stream()
                 .map(this::toUserInfoDto)

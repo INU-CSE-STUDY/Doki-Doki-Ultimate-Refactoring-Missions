@@ -25,10 +25,10 @@ public class UserQueryDSLRepository extends QuerydslRepositorySupport {
                 .fetch();
     }
 
-    public List<User> findAllByType(String type) {
+    public List<User> findAllByType(Role type) {
         return queryFactory
                 .selectFrom(qUser)
-                .where(qUser.type.eq(Role.valueOf(type.toUpperCase())))
+                .where(qUser.type.eq(type))
                 .fetch();
     }
 
