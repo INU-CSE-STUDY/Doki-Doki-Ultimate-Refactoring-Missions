@@ -53,10 +53,6 @@ public class User {
     @Column
     private Gender gender;
 
-    @Schema(description = "refresh token")
-    @Column(name = "refresh_token")
-    private String refreshToken;
-
     @Schema(description = "유저 생성 일시")
     @Column
     private LocalDateTime createdDate;
