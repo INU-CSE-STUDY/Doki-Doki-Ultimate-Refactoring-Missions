@@ -31,9 +31,9 @@ public enum ExceptionCode {
     /**
      * 401 UNAUTHORIZED: 인증되지 않은 사용자
      */
+    NO_SIGNATURE_TOKEN(UNAUTHORIZED, "유효하지 않은 토큰입니다."),
     INVALID_TOKEN(UNAUTHORIZED, "손상된 토큰입니다."),
     EXPIRED_TOKEN(UNAUTHORIZED, "만료된 토큰입니다."),
-    UNAUTHORIZED_USER(UNAUTHORIZED, "로그인이 필요합니다."),
 
     /**
      * 403 FORBIDDEN: 권한이 없는 사용자
