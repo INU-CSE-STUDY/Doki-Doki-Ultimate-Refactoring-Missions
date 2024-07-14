@@ -1,12 +1,15 @@
 package com.capstone.webserver.user.service;
 
+import com.capstone.webserver.common.config.jwt.TokenProvider;
 import com.capstone.webserver.common.response.exception.CustomException;
 import com.capstone.webserver.common.response.exception.ExceptionCode;
 import com.capstone.webserver.user.dto.UserDto;
 import com.capstone.webserver.user.entity.Gender;
 import com.capstone.webserver.user.entity.Role;
 import com.capstone.webserver.user.entity.User;
+import com.capstone.webserver.user.entity.UserRefreshToken;
 import com.capstone.webserver.user.repository.UserQueryDSLRepository;
+import com.capstone.webserver.user.repository.UserRefreshTokenRepository;
 import com.capstone.webserver.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,8 +21,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
 
+    private final UserRefreshTokenRepository userRefreshTokenRepository;
     private final UserQueryDSLRepository userQueryDSLRepository;
     private final UserRepository userRepository;
+    private final TokenProvider tokenProvider;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -47,6 +52,28 @@ public class UserService {
         User user = userQueryDSLRepository.findByLoginId(loginId);
 
         return user != null;
+    }
+
+    public UserDto.UserLoginResponseDto login(UserDto.UserLoginDto dto) {
+        String loginId = dto.getLoginId();
+        String password = dto.getPassword();
+
+        User user = userQueryDSLRepository.findByLoginId(loginId);
+
+        if (!bCryptPasswordEncoder.matches(password, user.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        String accessToken = tokenProvider.createAccessToken(String.format("%s:%s", user.getLoginId(), user.getType()));
+        String refreshToken = tokenProvider.createRefreshToken();
+
+        userRefreshTokenRepository.findById(user.getId())
+                .ifPresentOrElse(
+                        it -> it.updateRefreshToken(refreshToken),
+                        () -> userRefreshTokenRepository.save(new UserRefreshToken(user, refreshToken))
+                );
+
+        return new UserDto.UserLoginResponseDto(user.getName(), user.getLoginId(), user.getType().toString(), accessToken, refreshToken);
     }
 
     public List<UserDto.UserBasicDto> findAll() {

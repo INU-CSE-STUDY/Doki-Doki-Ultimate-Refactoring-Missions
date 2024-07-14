@@ -49,4 +49,8 @@ public class UserController {
         return ResponseEntity.ok(isDuplicated);
     }
 
+    @PostMapping("/users/login")
+    public ResponseEntity<UserDto.UserLoginResponseDto> login(@RequestBody UserDto.UserLoginDto dto) {
+        return ResponseEntity.ok(userService.login(dto));
+    }
 }
