@@ -1,13 +1,18 @@
 package com.capstone.webserver.common.config.jwt;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -22,11 +27,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        try {
+            String accessToken = parseBearerToken(request, HttpHeaders.AUTHORIZATION);	// parseBearerToken() 변경에 따른 수정
+            User user = parseUserSpecification(accessToken);
+            AbstractAuthenticationToken authenticated = UsernamePasswordAuthenticationToken.authenticated(user, accessToken, user.getAuthorities());
+            authenticated.setDetails(new WebAuthenticationDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authenticated);
+        } catch (ExpiredJwtException e) {	// 변경
+            reissueAccessToken(request, response, e);
+        } catch (Exception e) {
+            request.setAttribute("exception", e);
+        }
 
+        filterChain.doFilter(request, response);
     }
 
-    private String parseBearerToken(HttpServletRequest request) {
-        return Optional.ofNullable(request.getHeader(HttpHeaders.AUTHORIZATION))
+    private String parseBearerToken(HttpServletRequest request, String headerName) {
+        return Optional.ofNullable(request.getHeader(headerName))
                 .filter(token -> token.substring(0, 7).equalsIgnoreCase("Bearer "))
                 .map(token -> token.substring(7))
                 .orElse(null);
@@ -40,5 +57,29 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 .split(":");
 
         return new User(split[0], "", List.of(new SimpleGrantedAuthority(split[1])));
+    }
+
+    private void reissueAccessToken(HttpServletRequest request, HttpServletResponse response, ExpiredJwtException customException) {
+        try {
+            String refreshToken = parseBearerToken(request, "Refresh-Token");
+
+            if (refreshToken == null) {
+                throw customException;
+            }
+
+            String oldAccessToken = parseBearerToken(request, HttpHeaders.AUTHORIZATION);
+            tokenProvider.validateRefreshToken(refreshToken, oldAccessToken);
+            String newAccessToken = tokenProvider.recreateAccessToken(oldAccessToken);
+
+            User user = parseUserSpecification(newAccessToken);
+            UsernamePasswordAuthenticationToken authenticated = UsernamePasswordAuthenticationToken.authenticated(user, newAccessToken, user.getAuthorities());
+            authenticated.setDetails(new WebAuthenticationDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authenticated);
+
+            response.setHeader("New-Access-Token", newAccessToken);
+
+        } catch (Exception e) {
+            request.setAttribute("exception", e);
+        }
     }
 }
